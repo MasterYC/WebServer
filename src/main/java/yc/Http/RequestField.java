@@ -17,7 +17,11 @@ public enum RequestField {
     Cache_Control("Cache-Control"),
     Cookie("Cookie"),
     Set_Cookie("Set-Cookie"),
-    Range("Range");
+    Range("Range"),
+    Sec_Ch_Ua("Sec-CH-UA"),
+    Sec_Ch_Ua_Mobile("Sec-CH-UA-Mobile"),
+    Sec_Ch_Ua_Platform("Sec-CH-UA-Platform"),
+    Upgrade_Insecure_Requests("Upgrade-Insecure-Requests");
 
     private static final Map<String, RequestField> map;
 
