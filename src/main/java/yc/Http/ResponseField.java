@@ -35,10 +35,6 @@ public enum ResponseField{
         return value;
     }
     public static ResponseField getEnum(String value){
-        ResponseField responseField=map.get(value);
-        if(responseField==null){
-            throw new IllegalArgumentException("Invalid Response Field");
-        }
-        return responseField;
+        return map.get(value);
     }
 }

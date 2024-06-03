@@ -43,11 +43,7 @@ public enum RequestField {
     }
 
     public static RequestField getEnum(String value) {
-        RequestField requestField = map.get(value);
-        if (requestField == null) {
-            throw new IllegalArgumentException("Invalid Request Field");
-        }
-        return requestField;
+        return map.get(value);
     }
 
 }

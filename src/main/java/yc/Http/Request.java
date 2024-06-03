@@ -18,7 +18,7 @@ public class Request {
     private Method method;
     private String target;
     private String version;
-    private Map<RequestField,String> fields;
+    private final Map<RequestField,String> fields;
     private StringBuilder body;
 
     public Request(){
@@ -38,47 +38,68 @@ public class Request {
         this.body=new StringBuilder();
         this.fields=new HashMap<>();
     }
-    void setBody(String body){
+    public void setBody(String body){
         this.body=new StringBuilder(body);
     }
-    void appendBody(String body){
+    public void appendBody(String body){
         this.body.append(body);
     }
-    String getBody() {
+    public String getBody() {
         return this.body.toString();
     }
-    int getBodyLength(){
+    public int getBodyLength(){
         return this.body.length();
     }
-    void setMethod(String method){
+    public void setMethod(String method){
         this.method=Method.valueOf(method);
     }
-    String getMethod(){
+    public void setMethod(Method method){
+        this.method=method;
+    }
+    public String getMethod(){
         return this.method.name();
     }
-    void setTarget(String target){
+    public Method getMethodEnum(){
+        return this.method;
+    }
+    public void setTarget(String target){
         this.target=target;
     }
-    String getTarget(){
+    public String getTarget(){
         return this.target;
     }
-    void setVersion(String version){
+    public void setVersion(String version){
         this.version=version;
     }
-    String getVersion(){
+    public String getVersion(){
         return this.version;
     }
-    void put(String key,String value){
-        try {
-            fields.put(RequestField.getEnum(key),value);
-        }catch (IllegalArgumentException e){
-            return;
+    public void put(String key,String value){
+        var enumField=RequestField.getEnum(key);
+        if(enumField!=null)
+            this.fields.put(enumField,value);
+    }
+    public String get(RequestField key){
+       return this.fields.get(key);
+    }
+    @Override
+    public String toString(){
+        StringBuilder sb=new StringBuilder();
+        sb.append(this.method.name()).append(" ").append(this.target).append(" ").append(this.version).append("\r\n");
+        for(var entry:this.fields.entrySet()){
+            sb.append(entry.getKey().getValue()).append(": ").append(entry.getValue()).append("\r\n");
         }
+        sb.append("\r\n");
+        sb.append(this.body);
+        return sb.toString();
     }
-    String get(RequestField key){
-       return fields.get(key);
+    public void clear(){
+        this.method=Method.GET;
+        this.target="/";
+        this.version="HTTP/1.1";
+        this.fields.clear();
+        this.body=new StringBuilder();
     }
-
 
 
 

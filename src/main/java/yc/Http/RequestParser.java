@@ -6,8 +6,8 @@ public class RequestParser {
     private Request request;
     private boolean isDone;
     private boolean isHeaderDone;
-    String last_buffer;
-    int body_length;
+    private String last_buffer;
+    private int body_length;
 
     public RequestParser(){
         reset();
@@ -42,7 +42,7 @@ public class RequestParser {
             }
             int n=bufferString.indexOf("\r\n\r\n");
             n=n+3-last_buffer.length();
-            last_buffer="";
+//            last_buffer="";
             isHeaderDone=true;
             String ll=request.get(RequestField.Content_Length);
             if(ll==null){
@@ -67,6 +67,9 @@ public class RequestParser {
             isDone=true;
             return diff_length;
         }
+    }
+    public Request getRequest(){
+        return request;
     }
 
     public boolean isDone(){
