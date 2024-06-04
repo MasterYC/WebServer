@@ -6,7 +6,7 @@ public class RequestParser {
     private Request request;
     private boolean isDone;
     private boolean isHeaderDone;
-    private String last_buffer;
+    private byte[] last_buffer;
     private int body_length;
 
     public RequestParser(){
@@ -17,7 +17,7 @@ public class RequestParser {
         isDone = false;
         isHeaderDone = false;
         body_length=0;
-        last_buffer="";
+        last_buffer=new byte[0];
     }
     public int put(byte[] buffer,int length){
         if(!isHeaderDone){
@@ -28,7 +28,10 @@ public class RequestParser {
         return 0;
     }
     private int handle_header(byte[] buffer,int length){
-        String bufferString =last_buffer+ new String(buffer,0,length, StandardCharsets.UTF_8);
+        byte[] new_buffer=new byte[last_buffer.length+length];
+        System.arraycopy(last_buffer,0,new_buffer,0,last_buffer.length);
+        System.arraycopy(buffer,0,new_buffer,last_buffer.length,length);
+        String bufferString =new String(new_buffer,0,new_buffer.length, StandardCharsets.UTF_8);
         if(bufferString.contains("\r\n\r\n")){
             var fields=bufferString.split("\r\n");
             String head=fields[0];
@@ -41,8 +44,8 @@ public class RequestParser {
                 request.put(key_value[0],key_value[1]);
             }
             int n=bufferString.indexOf("\r\n\r\n");
-            n=n+3-last_buffer.length();
-//            last_buffer="";
+            n=n+4-last_buffer.length;
+            last_buffer=new byte[0];
             isHeaderDone=true;
             String ll=request.get(RequestField.Content_Length);
             if(ll==null){
@@ -50,10 +53,9 @@ public class RequestParser {
             }else{
                 body_length=Integer.parseInt(ll);
             }
-
             return n;
         }else{
-            last_buffer=bufferString;
+            last_buffer=new_buffer;
             return length;
         }
     }

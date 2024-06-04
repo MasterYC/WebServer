@@ -8,10 +8,14 @@ import java.net.Socket;
 
 public class Session {
     private Socket socket;
-    public Session(Socket socket) throws IOException{
+    public Session(Socket socket)  {
         this.socket=socket;
-        socket.setKeepAlive(true);
-        socket.setSoTimeout(1000);
+        try {
+            socket.setKeepAlive(true);
+            socket.setSoTimeout(10000);
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
     public void run(){
         try {
@@ -40,10 +44,17 @@ public class Session {
                 response.setBody("hello world");
                 writer.write(response.toString().getBytes());
                 writer.flush();
+                System.out.println(requestParser.getRequest());
             }
-        }catch (IOException e){
-            return;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            try {
+                socket.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
+
 
     }
 }
