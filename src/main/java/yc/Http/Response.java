@@ -26,7 +26,6 @@ public class Response {
 
     public void setBody(String body) {
         this.body = new StringBuilder(body);
-        this.fields.put(ResponseField.Content_Length,Integer.toString(this.body.toString().getBytes().length));
     }
     public void put(String key, String value){
         ResponseField field=ResponseField.getEnum(key);
@@ -84,6 +83,9 @@ public class Response {
     @Override
     public String toString(){
         var sb=new StringBuilder();
+        if(!this.body.isEmpty() &&this.fields.get(ResponseField.Content_Length)==null){
+            this.fields.put(ResponseField.Content_Length,Integer.toString(this.body.toString().getBytes().length));
+        }
         sb.append(this.version).append(" ").append(this.status.getCode()).append(" ").append(this.status.getMessage()).append("\r\n");
         for(var entry:this.fields.entrySet()){
             sb.append(entry.getKey().getValue()).append(": ").append(entry.getValue()).append("\r\n");
