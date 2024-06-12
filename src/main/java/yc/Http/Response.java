@@ -33,6 +33,9 @@ public class Response {
             this.fields.put(field,value);
         }
     }
+    public void put(ResponseField key,String value){
+        this.fields.put(key,value);
+    }
     public String get(ResponseField field){
         return this.fields.get(field);
     }

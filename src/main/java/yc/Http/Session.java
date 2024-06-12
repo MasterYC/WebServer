@@ -41,10 +41,11 @@ public class Session {
                     }
                 }
                 Response response=new Response();
+                response.put(ResponseField.Connection,"keep-alive");
                 response.setBody("hello world");
                 writer.write(response.toString().getBytes());
                 writer.flush();
-                System.out.println(requestParser.getRequest());
+//                System.out.println(requestParser.getRequest());
             }
         }catch (Exception e){
             System.out.println(e.getMessage());

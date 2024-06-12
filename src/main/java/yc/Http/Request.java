@@ -86,6 +86,9 @@ public class Request {
     public String toString(){
         StringBuilder sb=new StringBuilder();
         sb.append(this.method.name()).append(" ").append(this.target).append(" ").append(this.version).append("\r\n");
+        if(!this.body.isEmpty() &&this.fields.get(RequestField.Content_Length)==null){
+            this.fields.put(RequestField.Content_Length,Integer.toString(this.body.toString().getBytes().length));
+        }
         for(var entry:this.fields.entrySet()){
             sb.append(entry.getKey().getValue()).append(": ").append(entry.getValue()).append("\r\n");
         }
